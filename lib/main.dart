@@ -1,113 +1,34 @@
-/// ExploraEC - Prácticas de Desarrollo Móvil Flutter (CEDIA MOD3).
-/// Autora: Verónica Villarreal (@Very787)
-/// Catálogo de lugares turísticos, mapas con geolocalización, persistencia en Hive,
-/// autenticación segura, gestión de gastos y asistente virtual.
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'bindings/app_binding.dart';
-import 'screens/assistant_screen.dart';
-import 'screens/favorites_screen.dart';
-import 'screens/gastos_screen.dart';
-import 'screens/home_screen.dart';
-import 'screens/map_screen.dart';
-import 'theme/app_theme.dart';
-import 'utils/reporte_errores.dart';
-
-final _mensajes = GlobalKey<ScaffoldMessengerState>();
+import 'studyflow/bindings/studyflow_binding.dart';
+import 'studyflow/screens/auth_gate.dart';
+import 'studyflow/theme/studyflow_theme.dart';
 
 Future<void> main() async {
-  // Hive necesita el motor de Flutter listo antes de pedir al sistema la
-  // carpeta donde guardar sus archivos; por eso `main` es async.
   WidgetsFlutterBinding.ensureInitialized();
-  ReporteErrores.instalar(
-    alErrorAsincrono: () {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _mensajes.currentState?.showSnackBar(const SnackBar(
-          content: Text('Algo salió mal. Puedes intentarlo de nuevo.'),
-        ));
-      });
-      WidgetsBinding.instance.scheduleFrame();
-    },
-    salidaSegura: () {
-      final navegador = Get.key.currentState;
-      if (navegador == null) return;
-      if (navegador.canPop()) {
-        navegador.pop();
-      } else {
-        Get.offAll(() => const RootShell());
-      }
-    },
-  );
   await Hive.initFlutter();
-  // Solo la caja de favoritos: la de gastos depende de QUIÉN inicie sesión y
-  // se abre después, en GastosRepository.abrirParaUsuario().
-  await Hive.openBox<Map>('favoritos');
-  runApp(const ExploraEcApp());
+  await Hive.openBox<String>('studyflow_favorites');
+  await Hive.openBox<String>('studyflow_drafts');
+  runApp(const StudyFlowApp());
 }
 
-class ExploraEcApp extends StatelessWidget {
-  const ExploraEcApp({super.key});
+class StudyFlowApp extends StatelessWidget {
+  const StudyFlowApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'ExploraEC',
-      scaffoldMessengerKey: _mensajes,
+      title: 'StudyFlow IA',
       debugShowCheckedModeBanner: false,
       locale: const Locale('es'),
       supportedLocales: const [Locale('es')],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      theme: AppTheme.theme,
-      initialBinding: AppBinding(),
-      home: const RootShell(),
-    );
-  }
-}
-
-class RootShell extends StatefulWidget {
-  const RootShell({super.key});
-
-  @override
-  State<RootShell> createState() => _RootShellState();
-}
-
-class _RootShellState extends State<RootShell> {
-  int _indiceActual = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: switch (_indiceActual) {
-        0 => const HomeScreen(),
-        1 => const MapScreen(),
-        2 => const FavoritesScreen(),
-        3 => const GastosScreen(),
-        _ => const AssistantScreen(),
-      },
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _indiceActual,
-        onTap: (indice) => setState(() => _indiceActual = indice),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Mapa'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favoritos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_long),
-            label: 'Gastos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: 'Asistente',
-          ),
-        ],
-      ),
+      theme: StudyFlowTheme.light,
+      initialBinding: StudyFlowBinding(),
+      home: const AuthGate(),
     );
   }
 }

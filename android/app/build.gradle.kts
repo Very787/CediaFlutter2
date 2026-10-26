@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.bto.exploraec"
+    namespace = "com.very787.studyflow"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         // Identidad de la práctica, igual al identificador de las teselas OSM.
-        applicationId = "com.bto.exploraec"
+        applicationId = "com.very787.studyflow"
         // Versiones mínimas y objetivo configuradas por el SDK de Flutter.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion

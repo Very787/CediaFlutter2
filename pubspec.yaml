@@ -1,5 +1,5 @@
-name: exploraec
-description: "Prácticas de ExploraEC - Desarrollo Móvil Flutter (CEDIA MOD3) por Verónica Villarreal."
+name: studyflow_ia
+description: "StudyFlow IA: planificación académica con persistencia remota, local y asistencia segura."
 publish_to: "none"
 version: 1.0.0+1
 
@@ -12,12 +12,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   get: ^4.6.6
-  geolocator: ^13.0.1
-  permission_handler: ^11.3.1
-  flutter_map: ^7.0.2
-  latlong2: ^0.9.1
   http: ^1.2.2
-  dio: ^5.11.1
   flutter_secure_storage: ^11.2.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0

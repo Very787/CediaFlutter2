@@ -1,41 +1,27 @@
-﻿# CediaFlutter2 — prácticas ExploraEC
+# StudyFlow IA — instrucciones para agentes
 
-Proyecto personal de formación del curso CEDIA MOD3 Flutter, en laboratorio local.
-Objetivo: completar las prácticas indicadas por sus instructivos y comprobar sus flujos reales.
-Tecnología: Flutter, Dart y Material. Los lugares de ejemplo son públicos; favoritos se guardan en Hive y los gastos usan API y caché privada por usuario.
+Aplicación Flutter independiente para el proyecto final del curso CEDIA MOD3. Su dominio es la planificación académica; no es una extensión de ExploraEC.
 
-El código de referencia corresponde al repositorio Patricio-CEDIA/exploraec-app, por sesión.
-Conservar su atribución y verificar su licencia antes de publicar derivados.
-Los requisitos vienen del instructivo académico; no añadir funciones de sesiones posteriores sin necesidad.
+## Alcance obligatorio
 
-## Autoridad y conservación
+- Flutter/Dart y Material 3.
+- Estado compartido con GetX.
+- Arquitectura pantalla → controlador → repositorio → fuente de datos.
+- Registro, inicio y cierre de sesión; token solo en almacenamiento seguro.
+- Catálogo remoto de 20 recursos, CRUD remoto aislado por usuario y favoritos locales con Hive.
+- Asistente académico consumido mediante `server/`; ninguna clave de IA pertenece al cliente.
+- Estados explícitos de carga, vacío, error y contenido.
 
-La preparación y las pruebas locales están autorizadas. Publicar un repositorio y entregar archivos en el aula requieren aprobar destino, visibilidad y entrega concreta.
-Anunciar las mutaciones. No borrar, sobrescribir recursos ajenos ni reescribir historia sin aprobación específica.
-No guardar cookies, contraseñas, datos privados ni credenciales en Git o evidencias.
-Conservar cambios ajenos. Recuperar versiones por commits y artefactos; cualquier recuperación destructiva necesita aprobación.
-No hay despliegue productivo ni políticas institucionales inferidas.
+## Calidad y seguridad
 
-## Verificación y continuidad
+- Ejecutar `flutter analyze`, `flutter test` y `node --test server/test/*.test.js`.
+- No versionar `.env`, `server/data.json`, tokens, contraseñas, cookies ni claves.
+- Mantener mensajes diferenciados para 400, 401, 422, 5xx y fallos de red.
+- No llamar HTTP, Hive ni almacenamiento seguro directamente desde pantallas.
+- No desactivar pruebas para obtener CI verde.
 
-Ejecutar análisis estático, ejercicios Dart, pruebas de widgets y navegación real.
-Documentar limitaciones reales; un build aislado no prueba el flujo.
-Registrar avances en docs/bitacora, hitos y manifiestos de cambios externos.
-Guardar pruebas reproducibles y capturas en evidence. Versionar entregables por sesión.
+## Publicación
 
-## Economía de contexto
+La publicación, etiquetas y Releases requieren aprobación explícita. Antes de etiquetar, comprobar el flujo en un emulador limpio y que `API_BASE_URL` apunte a un servidor HTTPS accesible.
 
-Consultar primero el grafo codebase-memory para estructura y símbolos; leer funciones concretas.
-El contenido del instructivo y el checklist académico prevalecen sobre inferencias.
-Los manifiestos, el roadmap y las comprobaciones permiten retomar el trabajo sin leer el árbol completo.
-
-## Reglas de calidad de la sesión 10
-
-1. Las pruebas que instalen `ReporteErrores` restauran `FlutterError.onError`, `PlatformDispatcher.instance.onError` y `ErrorWidget.builder` en `finally`, con `tearDown` como respaldo. Ningún manejador puede ocultar los errores del resto de la suite.
-2. El filtro de Gastos deriva únicamente tarjetas de páginas cargadas: conserva la lista original, las sumas, la caché, el total remoto y la paginación. La selección se valida después de actualizar por completo la lista, se reinicia al cambiar de sesión y mantiene «Cargar más» accesible aun sin coincidencias.
-
-## Decisión autorizada — 2026-10-05
-
-El estudiante autorizó GitHub, propietario Very787, nombre CediaFlutter2 y visibilidad pública para revisión docente. El repositorio quedó publicado y verificado. La entrega Moodle mantiene su aprobación específica de archivos finales.
-
-Tras aprobar los cuatro archivos exactos, se completaron las entregas 49354 y 49368 el 2026-10-05. Esta aprobación corresponde a esas versiones; una entrega posterior requiere revisar su autoridad concreta.
+Las antiguas prácticas se conservan en ramas `practica/sesionXX`; no mezclarlas nuevamente con `main`.

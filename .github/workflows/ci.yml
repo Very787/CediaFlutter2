@@ -1,4 +1,4 @@
-name: CI
+name: StudyFlow CI
 
 on:
   push:
@@ -8,11 +8,6 @@ on:
 
 permissions:
   contents: read
-
-env:
-  CI: 'true'
-  FLUTTER_SUPPRESS_ANALYTICS: 'true'
-  DART_SUPPRESS_ANALYTICS: 'true'
 
 jobs:
   calidad:
@@ -28,25 +23,25 @@ jobs:
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.47.6'
+          flutter-version: '3.47.8'
           channel: stable
           cache: false
       - uses: actions/setup-node@v7
         with:
           node-version: '22.23.0'
           package-manager-cache: false
-      - name: Versiones
-        run: |
-          flutter --version
-          java -version
-          node --version
-      - name: Dependencias bloqueadas
+      - name: Dependencias Flutter bloqueadas
         run: flutter pub get --enforce-lockfile
       - name: Análisis estático
         run: flutter analyze --no-pub
-      - name: Suite Flutter completa
+      - name: Pruebas Flutter
         run: flutter test --no-pub --reporter expanded
-      - name: Controles de práctica S10
-        run: flutter test --no-pub --reporter expanded --dart-define=LAB_PRUEBAS=true test/sesion_10_test.dart test/filtro_gastos_test.dart
-      - name: Suite Node S9
-        run: node --test mock-server/test/*.test.js
+      - name: Pruebas del servidor
+        run: node --test server/test/*.test.js
+      - name: Auditoría básica de secretos
+        shell: bash
+        run: |
+          if git grep -nE '(sk-[A-Za-z0-9_-]{20,}|OPENAI_API_KEY=(sk-|[A-Za-z0-9_-]{20,}))' -- ':!*.example'; then
+            echo 'Se encontró un posible secreto'
+            exit 1
+          fi
