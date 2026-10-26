@@ -10,6 +10,7 @@ Aplicación de formación en Flutter y Dart para las prácticas de widgets, tema
 | Sesión 3: tema, estados y accesibilidad | [78d2076](https://github.com/Very787/CediaFlutter2/tree/78d2076b7c9f03f5e64c209dc26f7054a86ffb77) | 17 pruebas; carga/vacío/error/reintento, lista/grilla y Semantics |
 | Sesión 4: estado compartido con GetX | [5372f57](https://github.com/Very787/CediaFlutter2/tree/5372f57a7b4f0d5bec0008d5c1ec58510e450bf6) | 25 pruebas; instancia única, alta inmediata, contador, avisos, worker y concurrencia |
 | Sesión 5: mapas y geolocalización | [d79f3b9](https://github.com/Very787/CediaFlutter2/tree/d79f3b94a8bada236060390318c64e83a03b5be3) | 36 pruebas; permisos Android reales, GPS emulado público, OSM, distancias y alta compartida |
+| Sesión 6: gastos desde el backend | [0c35a2b](https://github.com/Very787/CediaFlutter2/tree/0c35a2b5a6e4e19b38b6443cc56363cd18716b7b) | 61 pruebas normales y 1 adicional; API/PostgreSQL reales, vacío/tres gastos, conexión, 401/422 y timeout autenticado 1 ms→15 s |
 
 Los informes y los ZIP de fuentes están organizados por práctica en `entregas/`.
 Cada informe contiene un enlace clicable al commit exacto de su práctica.
@@ -47,7 +48,7 @@ Se verificó web sobre Edge, incluidos estados, formularios y controles accesibl
 
 ## Fuente académica
 
-Basado en el material de [Patricio-CEDIA/exploraec-app](https://github.com/Patricio-CEDIA/exploraec-app), ramas `sesion-02` a `sesion-05`, y sus instructivos de práctica. Se conserva la atribución del curso.
+Basado en el material de [Patricio-CEDIA/exploraec-app](https://github.com/Patricio-CEDIA/exploraec-app), ramas `sesion-02` a `sesion-06`, y sus instructivos de práctica. Se conserva la atribución del curso. Las referencias docentes consultadas no declaran licencia; no se les asigna una licencia inventada.
 
 ## Sesión 4
 
@@ -66,3 +67,13 @@ Mapa utiliza OpenStreetMap y observa la posición y la lista compartida. Los mar
 ```bash
 flutter run -d chrome -t lib/playground/mapa_demo_main.dart
 ```
+
+## Sesión 6
+
+Gastos añade registro, login mediante formulario y listado paginado contra el backend real del curso. El JWT permanece en memoria; `X-Total-Count` determina el total. Se conservan Inicio, Mapa y Favoritos, y se reutilizan carga, vacío, error y reintento.
+
+[Explicación y requisitos](docs/practica-sesion06.md). Backend docente fijo: [480481e](https://github.com/cj-murillo/proyecto-curso-spec-kit/tree/480481ed87cedcfd7681da9ecacbcd80ac4ef08f). Validación:61 pruebas normales, una adicional de laboratorio, análisis y formato aprobados; flujo visible en Edge con API y PostgreSQL reales, errores de conexión/401/422 y timeout autenticado1ms→15s. Las fuentes Android contienen Internet y HTTP de desarrollo; esta sesión se ejecutó en web con un adaptador CORS local documentado. No se afirma ejecución Android S6.
+
+El backend, sus accesos y el agrupador de soporte no se incluyen en Git ni en el ZIP.
+
+Entregables finales: [ZIP de 71 fuentes](entregas/sesion06/exploraec-sesion06.zip) e [informe de diez páginas](entregas/sesion06/informe-practica-sesion06-entrega-v3.pdf). El informe enlaza el commit exacto. Tras aprobar ambos archivos, se entregaron en Moodle, actividad 49556, el 5 de octubre de 2026 a las 22:21. El aula muestra «Enviado para calificar» y «Sin calificar»; las dos descargas son idénticas a los originales por SHA-256. La interfaz confirmó nombres, fecha y estado. [Constancia saneada](evidence/sesion06/verificacion-moodle-entrega.json).
