@@ -1,6 +1,7 @@
-// Práctica académica CEDIA MOD3, basada en Patricio-CEDIA/exploraec-app,
-// sesiones 02–09. Lugares locales y JWT en almacenamiento seguro; Gastos usa una API REST
-// con caché de Hive por usuario; los favoritos de lugares son persistentes.
+/// ExploraEC - Prácticas de Desarrollo Móvil Flutter (CEDIA MOD3).
+/// Autora: Verónica Villarreal (@Very787)
+/// Catálogo de lugares turísticos, mapas con geolocalización, persistencia en Hive,
+/// autenticación segura, gestión de gastos y asistente virtual.
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -13,11 +14,33 @@ import 'screens/gastos_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/map_screen.dart';
 import 'theme/app_theme.dart';
+import 'utils/reporte_errores.dart';
+
+final _mensajes = GlobalKey<ScaffoldMessengerState>();
 
 Future<void> main() async {
   // Hive necesita el motor de Flutter listo antes de pedir al sistema la
   // carpeta donde guardar sus archivos; por eso `main` es async.
   WidgetsFlutterBinding.ensureInitialized();
+  ReporteErrores.instalar(
+    alErrorAsincrono: () {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _mensajes.currentState?.showSnackBar(const SnackBar(
+          content: Text('Algo salió mal. Puedes intentarlo de nuevo.'),
+        ));
+      });
+      WidgetsBinding.instance.scheduleFrame();
+    },
+    salidaSegura: () {
+      final navegador = Get.key.currentState;
+      if (navegador == null) return;
+      if (navegador.canPop()) {
+        navegador.pop();
+      } else {
+        Get.offAll(() => const RootShell());
+      }
+    },
+  );
   await Hive.initFlutter();
   // Solo la caja de favoritos: la de gastos depende de QUIÉN inicie sesión y
   // se abre después, en GastosRepository.abrirParaUsuario().
@@ -32,6 +55,7 @@ class ExploraEcApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'ExploraEC',
+      scaffoldMessengerKey: _mensajes,
       debugShowCheckedModeBanner: false,
       locale: const Locale('es'),
       supportedLocales: const [Locale('es')],
